@@ -1,13 +1,14 @@
 import express from "express";
 import router from "./routes/layout.js";
 import AppError from "./utils/appErros.js";
-import OpenDatabase from "./database/sqlite/index.js";
+import runMigrations from "./database/sqlite/migrations/index.js";
+
 
 
 const app = express();
 
   //open database connection
-OpenDatabase();
+runMigrations();
 
 app.use(express.json());
 
