@@ -8,5 +8,7 @@ const controller = new UserController();
 
 myRouter.post("/", controller.createUser);
 
+myRouter.put("/update/:id", controller.update);
+
 
 export default myRouter;
