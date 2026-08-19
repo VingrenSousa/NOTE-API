@@ -1,7 +1,8 @@
 
-import type { Request,Response } from "express";
+import {  response, type Request,type Response } from "express";
 import AppErros from "../utils/appErros.js";
 import Knex from "../database/knex/index.js";
+
 type propsbodynote ={
     title:string,
     description:string,
@@ -35,7 +36,7 @@ class NotesController {
             description,
             user_id
         });
-         console.log(" note kay: "+note_id[0]);
+
 
         const linksInsert = links.map((link: string) => {
             return {
@@ -44,7 +45,7 @@ class NotesController {
                 nota_id: note_id[0]
             }
         });
-        console.log(" obejeto links: "+linksInsert);
+        
 
         await Knex("links").insert(linksInsert);
 
@@ -57,19 +58,61 @@ class NotesController {
                 nota_id: note_id[0]
             }
         });
-        console.log(" obejeto tags: "+TagsInsert);
-        
+       
         await Knex("tegs").insert(TagsInsert);
 
         res.status(201).json({message: "Nota criada com sucesso!"});
 
+    };
+
+    async show(req: Request, res: Response) {
+        const {id}= req.params;
+
+        const note = await Knex("notes").where({ id }).first();
+        const tegs = await Knex('tegs').where({nota_id:id}).orderBy('name')
+        const links = await Knex('links').where({nota_id:id}).orderBy('created_at')
+        res.json({...note,tegs,links});
+    };
+
+    async delete(req: Request, res: Response) {
+        const {id}=req.params;
+        await Knex("notes").where({id}).delete();
+        res.json({"STATUS":"DELETADO COM SUCESSO"})
     }
+    async index(req: Request, res: Response){
+        type propsquery={
+            title:string,
+            user_id:number,
+            tegs:string
+        }
+        const {title,user_id,tegs}=req.query
 
+        let notes
+       if(typeof tegs !== "string"){
+         throw new AppErros("tegs deve ser uma string",400)
+       }
+        if(tegs){
+            const filterTags=tegs.split(",").map(tags=>tags)
+           notes = await Knex("tags")
+            .select([
+                "notes.id",
+                "notes.title",
+                "notes.user_id",
+            ])
+            .where("notes.user_id", user_id)
+            .whereLike("notes.title", `%${title}%`)
+            .whereIn("tags.name", filterTags)
+            .innerJoin("notes", "notes.id", "tags.nota_id");
+            
+        }else{
+            notes= await Knex('notes')
+            .where({user_id:user_id})
+            .whereLike("title",`%${title}%`)
+            .orderBy("title")
 
-
-
-    async update(req: Request, res: Response) {
-
+        }
+       
+        return res.json(notes)
     }
 }
 
