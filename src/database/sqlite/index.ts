@@ -5,12 +5,13 @@ import { fileURLToPath } from "node:url";
 
 
 
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function OpenDatabase() {
   const db = await open({
-    filename:path.resolve(__dirname,"..", "database.sqlite"),
+    filename:path.resolve(__dirname,"..","..","..","database","database.sqlite"),
     driver: sqlite3.Database,
   });
   return db;

@@ -9,12 +9,14 @@
   "scripts": {
     "dev": "tsx watch src/serve.ts",
     "build": "tsc",
+    "migrate": "knex migrate:latest",
     "start": "node dist/serve.js"
   },
   "dependencies": {
     "@types/node": "^26.2.0",
     "bcryptjs": "^3.0.3",
     "express": "^5.2.1",
+    "knex": "^3.3.0",
     "nodemon": "^3.1.14",
     "sqlite": "^5.1.1",
     "sqlite3": "^6.0.1"
