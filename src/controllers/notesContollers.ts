@@ -42,7 +42,7 @@ class NotesController {
             return {
              
                 url: link,
-                nota_id: note_id[0]
+                note_id: note_id[0]
             }
         });
         
@@ -55,7 +55,7 @@ class NotesController {
               
                 name:name,
                 user_id,
-                nota_id: note_id[0]
+                note_id: note_id[0]
             }
         });
        
@@ -69,8 +69,8 @@ class NotesController {
         const {id}= req.params;
 
         const note = await Knex("notes").where({ id }).first();
-        const tegs = await Knex('tegs').where({nota_id:id}).orderBy('name')
-        const links = await Knex('links').where({nota_id:id}).orderBy('created_at')
+        const tegs = await Knex('tegs').where({note_id:id}).orderBy('name')
+        const links = await Knex('links').where({note_id:id}).orderBy('created_at')
         res.json({...note,tegs,links});
     };
 
@@ -80,11 +80,7 @@ class NotesController {
         res.json({"STATUS":"DELETADO COM SUCESSO"})
     }
     async index(req: Request, res: Response){
-        type propsquery={
-            title:string,
-            user_id:number,
-            tegs:string
-        }
+  
         const {title,user_id,tegs}=req.query
 
         let notes
@@ -93,16 +89,16 @@ class NotesController {
        }
         if(tegs){
             const filterTags=tegs.split(",").map(tags=>tags)
-           notes = await Knex("tags")
+           notes = await Knex("tegs")
             .select([
                 "notes.id",
                 "notes.title",
                 "notes.user_id",
             ])
-            .where("notes.user_id", user_id)
+            .where("notes.user_id", user_id) // pegando somemte notas que seja do id do usuario 
             .whereLike("notes.title", `%${title}%`)
-            .whereIn("tags.name", filterTags)
-            .innerJoin("notes", "notes.id", "tags.nota_id");
+            .whereIn("tegs.name", filterTags)
+            .innerJoin("notes", "notes.id", "tegs.note_id");
             
         }else{
             notes= await Knex('notes')

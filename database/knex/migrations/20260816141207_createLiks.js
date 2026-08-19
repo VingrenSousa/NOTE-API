@@ -4,7 +4,7 @@ export const up = function(knex) {
     table.increments('id').primary();
     table.text('url').notNullable();
 
-    table.integer('nota_id').references('id').inTable('notes').onDelete('CASCADE');
+    table.integer('note_id').references('id').inTable('notes').onDelete('CASCADE');
 
     table.timestamp('created_at').defaultTo(knex.fn.now());
 });

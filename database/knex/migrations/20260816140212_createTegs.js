@@ -4,7 +4,7 @@ export const up = function(knex) {
     table.increments('id').primary();
     table.text('name').notNullable();
     table.integer('user_id').references('id').inTable('users').onDelete('CASCADE');
-    table.integer('nota_id').references('id').inTable('notes').onDelete('CASCADE');
+    table.integer('note_id').references('id').inTable('notes').onDelete('CASCADE');
 
    
     
