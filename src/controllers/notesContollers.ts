@@ -96,9 +96,10 @@ class NotesController {
                 "notes.user_id",
             ])
             .where("notes.user_id", user_id) // pegando somemte notas que seja do id do usuario 
-            .whereLike("notes.title", `%${title}%`)
-            .whereIn("tegs.name", filterTags)
-            .innerJoin("notes", "notes.id", "tegs.note_id");
+            .whereLike("notes.title", `%${title}%`)// pegando title onde a de alguma forma title ante ou depois
+            .whereIn("tegs.name", filterTags)// pegando somente onde tenhas  tegs
+            .innerJoin("notes", "notes.id", "tegs.note_id")//juntando tabelas
+            .orderBy("notes.title");//que pegue tudo por ordem de title, no caso alfabetica
             
         }else{
             notes= await Knex('notes')
@@ -107,8 +108,18 @@ class NotesController {
             .orderBy("title")
 
         }
+          
+       const userTegs = await Knex("tegs").where({user_id});
        
-        return res.json(notes)
+       const notesWithTags = notes.map((item)=>{
+        const notestegs=userTegs.filter(tag=>tag.note_id===item.id)
+        return{
+            ...item,
+            tags:notestegs
+        }
+       })
+    
+        return res.json(notesWithTags)
     }
 }
 
