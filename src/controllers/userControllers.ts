@@ -48,8 +48,9 @@ class UserController{
 
        const dataBase = await OpenDatabase();
 
+        // dofirmando se id do usuario existe
        const user = await dataBase.get("SELECT * FROM users WHERE id = ?", [id]);
-
+        // id fornecido nao e asociando a nenhum usuario
        if(!user){
         throw new AppErros("Usuário não encontrado", 404);
        }

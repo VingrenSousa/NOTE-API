@@ -7,7 +7,7 @@ import runMigrations from "./database/sqlite/migrations/index.js";
 
 const app = express();
 
-  //open database connection
+  //open database connection sqlite
 runMigrations();
 
 app.use(express.json());

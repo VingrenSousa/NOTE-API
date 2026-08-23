@@ -69,8 +69,11 @@ class NotesController {
         const {id}= req.params;
 
         const note = await Knex("notes").where({ id }).first();
+
         const tegs = await Knex('tegs').where({note_id:id}).orderBy('name')
+
         const links = await Knex('links').where({note_id:id}).orderBy('created_at')
+
         res.json({...note,tegs,links});
     };
 
@@ -83,6 +86,7 @@ class NotesController {
   
         const {title,user_id,tegs}=req.query
 
+        
         let notes
        if(typeof tegs !== "string"){
          throw new AppErros("tegs deve ser uma string",400)
@@ -112,7 +116,9 @@ class NotesController {
        const userTegs = await Knex("tegs").where({user_id});
        
        const notesWithTags = notes.map((item)=>{
+        
         const notestegs=userTegs.filter(tag=>tag.note_id===item.id)
+
         return{
             ...item,
             tags:notestegs
