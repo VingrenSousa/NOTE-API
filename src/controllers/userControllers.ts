@@ -44,7 +44,7 @@ class UserController{
     }
     async update(req: Request, res:Response){
         const { name ,email,password,old_password }:User = req.body;
-        const { id } = req.params;
+        const  {id}  = req.user ;
 
        const dataBase = await OpenDatabase();
 

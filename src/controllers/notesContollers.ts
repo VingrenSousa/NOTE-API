@@ -12,7 +12,7 @@ type propsbodynote ={
 }
 class NotesController {
    async create(req: Request, res: Response) { 
-        const { user_id }= req.params;
+        const { id }= req.user;
 
         const { title, description, tags,links } :propsbodynote= req.body;
 
@@ -22,7 +22,7 @@ class NotesController {
         }
     // vericando se a id user
 
-        if(!user_id){
+        if(!id){
             throw new AppErros("O id do usuário é obrigatório", 400);
         }
 
@@ -34,7 +34,7 @@ class NotesController {
         const note_id = await Knex("notes").insert({
             title,
             description,
-            user_id
+            user_id: id
         });
 
 
@@ -54,7 +54,7 @@ class NotesController {
             return {
               
                 name:name,
-                user_id,
+                user_id: id,
                 note_id: note_id[0]
             }
         });
@@ -66,7 +66,7 @@ class NotesController {
     };
 
     async show(req: Request, res: Response) {
-        const {id}= req.params;
+        const {id}= req.user;
 
         const note = await Knex("notes").where({ id }).first();
 
@@ -78,13 +78,15 @@ class NotesController {
     };
 
     async delete(req: Request, res: Response) {
-        const {id}=req.params;
+        const {id}=req.user;
         await Knex("notes").where({id}).delete();
         res.json({"STATUS":"DELETADO COM SUCESSO"})
     }
     async index(req: Request, res: Response){
   
-        const {title,user_id,tegs}=req.query
+        const {title,tegs}=req.query
+
+        const user_id=req.user.id
 
         
         let notes
