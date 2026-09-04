@@ -90,9 +90,10 @@ class NotesController {
 
         
         let notes
-       if(typeof tegs !== "string"){
+       if(typeof tegs !== "string" && typeof tegs !== "undefined") {
          throw new AppErros("tegs deve ser uma string",400)
        }
+
         if(tegs){
             const filterTags=tegs.split(",").map(tags=>tags)
            notes = await Knex("tegs")
@@ -100,6 +101,7 @@ class NotesController {
                 "notes.id",
                 "notes.title",
                 "notes.user_id",
+                "notes.description",
             ])
             .where("notes.user_id", user_id) // pegando somemte notas que seja do id do usuario 
             .whereLike("notes.title", `%${title}%`)// pegando title onde a de alguma forma title ante ou depois
@@ -107,7 +109,7 @@ class NotesController {
             .innerJoin("notes", "notes.id", "tegs.note_id")//juntando tabelas
             .orderBy("notes.title");//que pegue tudo por ordem de title, no caso alfabetica
             
-        }else{
+        }else {
             notes= await Knex('notes')
             .where({user_id:user_id})
             .whereLike("title",`%${title}%`)
@@ -119,12 +121,12 @@ class NotesController {
        
        const notesWithTags = notes.map((item)=>{
         
-        const notestegs=userTegs.filter(tag=>tag.note_id===item.id)
+            const notestegs=userTegs.filter(tag=>tag.note_id===item.id)
 
-        return{
-            ...item,
-            tags:notestegs
-        }
+            return{
+                ...item,
+                tags:notestegs
+            }
        })
     
         return res.json(notesWithTags)
