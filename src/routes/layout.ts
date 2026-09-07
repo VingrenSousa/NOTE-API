@@ -14,6 +14,6 @@ const router = express.Router();
 router.use("/notes", notesRouter);
 router.use("/sessions", sessionsRouter);
 router.use("/users",myRouter);
-router.use("/tegs",tegsRouter);
+router.use("/tags",tegsRouter);
 
 export default router;

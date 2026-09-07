@@ -8,13 +8,14 @@ const notesRouter = express.Router();
 const controller = new UserController();
 
 notesRouter.use(ensureAuth);
+
 notesRouter.get("/", controller.index);
 
-notesRouter.get("/show", controller.show);
+notesRouter.get("/show/:id", controller.show);
 
-notesRouter.post("/create", controller.create);
+notesRouter.post("/", controller.create);
 
-notesRouter.delete("/delete", controller.delete);
+notesRouter.delete("/", controller.delete);
 
 
 export default notesRouter;

@@ -66,9 +66,9 @@ class NotesController {
     };
 
     async show(req: Request, res: Response) {
-        const {id}= req.user;
-
-        const note = await Knex("notes").where({ id }).first();
+        const {id}= req.params
+        console.log(id)
+        const note = await Knex("notes").where({ id }).first();;
 
         const tegs = await Knex('tegs').where({note_id:id}).orderBy('name')
 
@@ -78,24 +78,24 @@ class NotesController {
     };
 
     async delete(req: Request, res: Response) {
-        const {id}=req.user;
+        const {id}=req.query;
         await Knex("notes").where({id}).delete();
         res.json({"STATUS":"DELETADO COM SUCESSO"})
     }
     async index(req: Request, res: Response){
   
-        const {title,tegs}=req.query
+        const {title,tags}=req.query
 
         const user_id=req.user.id
 
         
         let notes
-       if(typeof tegs !== "string" && typeof tegs !== "undefined") {
+       if(typeof tags !== "string" && typeof tags !== "undefined") {
          throw new AppErros("tegs deve ser uma string",400)
        }
 
-        if(tegs){
-            const filterTags=tegs.split(",").map(tags=>tags)
+        if(tags){
+            const filterTags=tags.split(",").map(tags=>tags)
            notes = await Knex("tegs")
             .select([
                 "notes.id",
@@ -109,12 +109,12 @@ class NotesController {
             .innerJoin("notes", "notes.id", "tegs.note_id")//juntando tabelas
             .orderBy("notes.title");//que pegue tudo por ordem de title, no caso alfabetica
             
-        }else {
+        }else{
             notes= await Knex('notes')
             .where({user_id:user_id})
             .whereLike("title",`%${title}%`)
             .orderBy("title")
-
+            
         }
           
        const userTegs = await Knex("tegs").where({user_id});

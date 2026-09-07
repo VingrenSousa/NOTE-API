@@ -9,6 +9,7 @@ class TagController {
         
         const teg = await Knex("tegs")
         .where({user_id:id})
+        .groupBy("name")// para agtupar pelo nome e nao trazer repítidas 
 
         res.json(teg)
     }

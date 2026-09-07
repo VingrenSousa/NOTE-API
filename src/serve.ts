@@ -3,7 +3,7 @@ import router from "./routes/layout.js";
 import AppError from "./utils/appErros.js";
 import runMigrations from "./database/sqlite/migrations/index.js";
 import { UPLOAD_FOLDER } from "./config/upload.js";
-
+import Cors from "cors"; 
 
 
 const app = express();
@@ -12,7 +12,7 @@ const app = express();
 runMigrations();
 
 app.use(express.json());
-
+app.use(Cors())
 
 app.use("/file",express.static(UPLOAD_FOLDER))
 
