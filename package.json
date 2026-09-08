@@ -10,8 +10,8 @@
     "dev": "tsx watch src/serve.ts",
     "build": "tsc",
     "migrate": "knex migrate:latest",
-    "startServe": "node dist/serve.js",
-    "start": "pm2-runtime start ecosystem.config.cjs --env production"
+    "start": "node dist/serve.js",
+    "startServe": "pm2-runtime start ecosystem.config.cjs --env production"
   },
   "dependencies": {
     "@types/node": "^26.2.0",
