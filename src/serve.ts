@@ -11,7 +11,6 @@ const app = express();
 
 dotenv.config()
 
-const port = process.env.SERVE_PORT
 
   //open database connection sqlite
 runMigrations();
@@ -34,6 +33,6 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 });
 
 
-app.listen(port, () => {
+app.listen(process.env.PORT, () => {
   console.log("Server is running on ");
 })
