@@ -15,7 +15,6 @@ const __dirname = path.dirname(__filename);
 
 export default {
 
-  development: {
     client: 'sqlite3',
     connection: {
       filename: path.resolve(__dirname,'database', 'database.sqlite')
@@ -27,7 +26,6 @@ export default {
       directory: path.resolve(__dirname,'database', 'knex', 'migrations')
     },
     useNullAsDefault: true
-  },
 
 
 };

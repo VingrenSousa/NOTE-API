@@ -10,18 +10,21 @@
     "dev": "tsx watch src/serve.ts",
     "build": "tsc",
     "migrate": "knex migrate:latest",
-    "start": "node dist/serve.js"
+    "startServe": "node dist/serve.js",
+    "start": "pm2-runtime start ecosystem.config.cjs --env production"
   },
   "dependencies": {
     "@types/node": "^26.2.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "crypto": "^1.0.1",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "knex": "^3.3.0",
     "multer": "^2.3.0",
     "nodemon": "^3.1.14",
+    "pm2": "^7.0.4",
     "sqlite": "^5.1.1",
     "sqlite3": "^6.0.1"
   },

@@ -2,7 +2,7 @@ import type { SignOptions } from "jsonwebtoken";
 
 export default {
     jwt:{
-        secret: "default",
+        secret: process.env.AUTH_SECRET,
         expirenIn: "1d"
     }
 } as AuthConfig;

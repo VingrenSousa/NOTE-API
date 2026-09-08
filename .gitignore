@@ -6,6 +6,6 @@ src/database/database.sqlite
 
 database/database.sqlite
 
-
+.env
 
 
