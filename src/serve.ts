@@ -1,15 +1,18 @@
+import "dotenv/config";
+
 import express from "express";
 import router from "./routes/layout.js";
 import AppError from "./utils/appErros.js";
 import runMigrations from "./database/sqlite/migrations/index.js";
 import { UPLOAD_FOLDER } from "./config/upload.js";
 import Cors from "cors"; 
-import dotenv from "dotenv";
+
+
 
 
 const app = express();
 
-dotenv.config()
+
 
 
   //open database connection sqlite
