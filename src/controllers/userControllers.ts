@@ -2,6 +2,7 @@ import type { Request,Response } from "express";
 import AppErros from "../utils/appErros.js";
 import OpenDatabase from "../database/sqlite/index.js";
 import {compare, hash} from "bcryptjs";
+import UserRepository from "../repository/UserRepository.js";
 
 type User = {
     id: string;
@@ -15,17 +16,15 @@ class UserController{
     async createUser(req: Request, res:Response){
         const { name, email,password } = req.body;
 
+        const userRepository = new UserRepository()
+
+
         // Validação dos campos obrigatórios
         if(!name || !email || !password){
             throw new AppErros("Todos os campos são obrigatórios", 400);
         }
-
-
-        // Abrindo a conexão com o banco de dados
-        const dataBase = await OpenDatabase();
-
         // Verificando se o email já existe no banco de dados
-        const chaqueUserExists = await dataBase.get("SELECT * FROM users WHERE email = ?", [email]);
+        const chaqueUserExists = await userRepository.findbyEmail(email)
 
         //chamando o erro caso o email já exista
         if(chaqueUserExists){
@@ -35,10 +34,8 @@ class UserController{
         const hashedPassword = await hash(password, 8);
 
         //criando o usuário no banco de dados
-       await dataBase.run(
-        "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-        [name, email, hashedPassword]
-       );
+       await userRepository.Create({name, email, Password:hashedPassword});
+
        res.status(201).json({message: "Usuário criado com sucesso!"});
    
     }
