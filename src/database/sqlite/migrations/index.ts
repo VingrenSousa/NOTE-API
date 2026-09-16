@@ -11,7 +11,7 @@ import CreateMigrationsTableUsers from "./createTableUsers.js";
     OpenDatabase()
     .then(async (db) => {
         await db.exec(schema);
-        console.log("Migrations executed successfully");
+       
     })
     .catch((err) => {
         console.error("Error executing migrations:", err);
